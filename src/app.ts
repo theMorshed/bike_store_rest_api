@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import cors from 'cors';
 import productRouter from './app/modules/product/bike_router';
+import orderRouter from './app/modules/order/order_router';
 
 const app: Application = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 
 // Router
 app.use('/api/products', productRouter);
+app.use('/api/orders', orderRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');
