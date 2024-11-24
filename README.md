@@ -91,6 +91,6 @@ http://localhost:5000
 
 ### 6. API Endpoints
 - **Product Management:**
-    -POST /api/products: Create a new product.
+    - *POST /api/products:* Create a new product.
 
 
