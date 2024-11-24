@@ -6,13 +6,13 @@ import { prouductServices } from "./bike_services";
  * @param req - Express request object, containing the bike data in the body
  * @param res - Express response object, to send the response back to the client
  */
-const createProduct = async (req: Request, res: Response) => {
+const createBike = async (req: Request, res: Response) => {
     try {
         // Get the bike data from the request body
         const bikeData = req.body;
         
         // Call the service to create the product in the database
-        const result = await prouductServices.createProuductInMongoDB(bikeData);
+        const result = await prouductServices.createBikeIntoDB(bikeData);
         
         // Respond with a success message and the created product data
         res.status(200).json({
@@ -152,7 +152,7 @@ const deleteBike = async (req: Request, res: Response) => {
 
 // Export the controller functions for use in routes
 export const productControllers = {
-    createProduct,
+    createBike,
     getAllBikes,
     getSingleBike,
     updateBike,

@@ -6,7 +6,7 @@ import ProductModel from "./bike_model";
  * @param product - The product (bike) data to be created.
  * @returns The created product document from MongoDB.
  */
-const createProuductInMongoDB = async (product: IProduct) => {
+const createBikeIntoDB = async (product: IProduct) => {
   // Create and save the new product in MongoDB
   const result = await ProductModel.create(product);
   return result;
@@ -72,7 +72,7 @@ const deleteBikeByID = async (id: string) => {
 
 // Export all service functions for use in the controller
 export const prouductServices = {
-  createProuductInMongoDB,
+  createBikeIntoDB,
   getAllBikes,
   getBikeByID,
   updateBikeByID,
