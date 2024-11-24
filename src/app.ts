@@ -23,7 +23,7 @@ app.use('/api/orders', orderRouter);
 
 // Root route that sends a simple "Hello, World!" message
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    res.send('Bike store API project run successfully');
 })
 
 // Export the app to be used in other files (typically server.ts or index.ts)
