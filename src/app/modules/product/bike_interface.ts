@@ -4,7 +4,7 @@ export type BikeCategory = "Mountain" | "Road" | "Hybrid" | "Electric";
 
 // Interface for the Product model
 // This defines the structure of a bike product, with fields like name, brand, price, category, description, etc.
-export interface Product {
+export interface IProduct {
   // Name of the bike product
   name: string;
 

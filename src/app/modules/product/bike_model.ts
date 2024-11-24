@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { IProduct } from "./bike_interface";
 
 // Define the schema for the Bike product
-const productSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema<IProduct>(
   {
   // The name of the bike
   name: {
