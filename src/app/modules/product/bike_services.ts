@@ -1,4 +1,4 @@
-import { Product } from "./bike_interface";
+import { IProduct } from "./bike_interface";
 import ProductModel from "./bike_model";
 
 /**
@@ -6,7 +6,7 @@ import ProductModel from "./bike_model";
  * @param product - The product (bike) data to be created.
  * @returns The created product document from MongoDB.
  */
-const createProuductInMongoDB = async (product: Product) => {
+const createProuductInMongoDB = async (product: IProduct) => {
   // Create and save the new product in MongoDB
   const result = await ProductModel.create(product);
   return result;
@@ -18,7 +18,7 @@ const createProuductInMongoDB = async (product: Product) => {
  * @param searchTerm - A string to search for matching bikes (optional).
  * @returns An array of bike products that match the search criteria.
  */
-const getAllBikes = async (searchTerm?: string): Promise<Product[]> => {
+const getAllBikes = async (searchTerm?: string): Promise<IProduct[]> => {
   // Initial query object to fetch all bikes
   const query: any = {};
 
