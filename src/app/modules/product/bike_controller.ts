@@ -65,13 +65,21 @@ const getAllBikes = async (req: Request, res: Response) => {
  * @param req - Express request object, containing the product ID in the route params
  * @param res - Express response object, to send the response back to the client
  */
-const getSingleBike = async (req: Request, res: Response) => {
+const getSingleBike = async (req: Request, res: Response): Promise<any> => {
     try {
         // Extract the product ID from the request parameters
         const { productId } = req.params;
         
         // Call the service to get the bike by its ID
         const result = await prouductServices.getBikeByID(productId);
+
+        // Check if the product exists
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: `Bike with ID ${productId} not found`,
+            });
+        }
 
         // Respond with a success message and the bike data
         res.status(200).json({
@@ -126,13 +134,21 @@ const updateBike = async (req: Request, res: Response) => {
  * @param req - Express request object, containing the product ID in the route params
  * @param res - Express response object, to send the response back to the client
  */
-const deleteBike = async (req: Request, res: Response) => {
+const deleteBike = async (req: Request, res: Response): Promise<any> => {
     try {
         // Extract the product ID from the request parameters
         const { productId } = req.params;
         
         // Call the service to delete the bike by its ID
         const result = await prouductServices.deleteBikeByID(productId);
+
+        // Check if the product exists
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: `Bike with ID ${productId} not found`,
+            });
+        }
 
         // Respond with a success message
         res.status(200).json({
