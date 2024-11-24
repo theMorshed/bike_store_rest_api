@@ -89,8 +89,92 @@ Once the server is running, you can access the application API at:
 http://localhost:5000
 ```
 
-### 6. API Endpoints
-- **Product Management:**
-    - *POST /api/products:* Create a new product.
+## 6. API Endpoints
+
+### Product Management:
+
+- **POST /api/products**: Create a new product.
+- **GET /api/products**: Get a list of all bikes. Optionally, you can query by name, brand, or category (e.g., `/api/products?searchTerm=Mountain`).
+- **GET /api/products/:productId**: Get details of a single bike.
+- **PUT /api/products/:productId**: Update bike details.
+- **DELETE /api/products/:productId**: Delete a bike.
+
+### Order Management:
+
+- **POST /api/orders**: Create an order (send email, product ID, and quantity).
+- **GET /api/orders/revenue**: Calculate the total revenue generated from all orders.
+
+## 7. Testing
+
+You can test the endpoints using Postman or any HTTP client. Here are some example requests:
+
+### Create Product:
+
+- **URL**: `POST /api/products`
+- **Body**:
+```json
+{
+  "name": "Mountain Xtreme",
+  "brand": "Giant",
+  "price": 1500,
+  "category": "Mountain",
+  "description": "A high-performance mountain bike.",
+  "quantity": 10,
+  "inStock": true
+}
+```
+
+### Create Order:
+
+- **URL**: `POST /api/orders`
+- **Body**:
+```json
+{
+  "email": "customer@example.com",
+  "product": "648a45e5f0123c45678d9012",  // Replace with a valid product ID
+  "quantity": 2
+}
+```
+
+### Get Revenue:
+
+- **URL**: `GET /api/orders/revenue`
+- **Description**: This endpoint calculates the total revenue generated from all orders.
+- **Response**:
+```json
+{
+  "message": "Revenue calculated successfully",
+  "status": true,
+  "data": {
+    "totalRevenue": 3600  // The total revenue from all orders
+  }
+}
+```
+
+## Development & Contribution
+
+- Fork the repository to your own GitHub account.
+- Clone your fork to your local machine.
+- Create a new branch for your changes.
+- Make your changes and commit them.
+- Push your changes and create a pull request.
+
+We welcome contributions and improvements! If you have suggestions, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Special thanks to [MongoDB](https://www.mongodb.com/) for providing the database solution.
+- Thank you to the developers of the libraries and tools used in this project:
+  - [Express](https://expressjs.com/) - Web framework for Node.js
+  - [Mongoose](https://mongoosejs.com/) - MongoDB object modeling tool
+  - [dotenv](https://www.npmjs.com/package/dotenv) - Loads environment variables from a `.env` file
+  - [CORS](https://www.npmjs.com/package/cors) - Middleware to enable Cross-Origin Resource Sharing
+  - [Node.js](https://nodejs.org/en/) - JavaScript runtime
+
+
 
 
