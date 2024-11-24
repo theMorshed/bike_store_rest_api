@@ -89,6 +89,8 @@ Once the server is running, you can access the application API at:
 http://localhost:5000
 ```
 
-
+### 6. API Endpoints
+- **Product Management:**
+    -POST /api/products: Create a new product.
 
 
