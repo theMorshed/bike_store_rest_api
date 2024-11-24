@@ -47,3 +47,11 @@ Clone this repository to your local machine using the following command:
 
 ```bash
 git clone https://github.com/yourusername/bike-store.git
+
+## 2. Install Dependencies
+
+Navigate to the project directory and install all required dependencies:
+
+```bash
+cd bike-store
+npm install
