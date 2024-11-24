@@ -2,34 +2,46 @@ import { Product } from "./bike_interface";
 import ProductModel from "./bike_model";
 
 const createProuductInMongoDB = async(product: Product) => {
-    const result = await ProductModel.create(product);
-    return result;
+  const result = await ProductModel.create(product);
+  return result;
 }
 
 const getAllBikes = async (searchTerm?: string): Promise<Product[]> => {
-    const query: any = {};
+  const query: any = {};
 
-    // Check if searchTerm is provided and build the query
-    if (searchTerm) {
-      const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search
-      query.$or = [
-        { name: regex },
-        { brand: regex },
-        { category: regex }
-      ];
-    }
+  // Check if searchTerm is provided and build the query
+  if (searchTerm) {
+    const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search
+    query.$or = [
+      { name: regex },
+      { brand: regex },
+      { category: regex }
+    ];
+  }
 
-    return await ProductModel.find(query);
+  return await ProductModel.find(query);
 }
 
 const getBikeByID = async(id: string) => {
-    const result = await ProductModel.findById(id);
-    return result;
+  const result = await ProductModel.findById(id);
+  return result;
+}
+
+const updateBikeByID = async(id: string, bikeData: any) => {
+  const result = await ProductModel.findByIdAndUpdate(id, bikeData, {new: true});
+  return result;
+}
+
+const deleteBikeByID = async(id: string) => {
+  const result = await ProductModel.findByIdAndDelete(id);
+  return result;
 }
 
 
 export const prouductServices = {
-    createProuductInMongoDB,
-    getAllBikes,
-    getBikeByID,
+  createProuductInMongoDB,
+  getAllBikes,
+  getBikeByID,
+  updateBikeByID,
+  deleteBikeByID
 }
