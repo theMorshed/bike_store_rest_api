@@ -5,17 +5,20 @@ This is a simple application for managing a bike store. It includes functionalit
 ## Features
 
 - **Product Management:**
+
   - Create, read, update, and delete bike products.
   - Search for bikes by name, brand, or category.
   - Display details for individual bike products.
 
 - **Order Management:**
+
   - Place orders for bikes.
   - Track orders based on customer email and product details.
   - Reduce stock and manage inventory when an order is placed.
   - Calculate total revenue from all orders.
 
 - **Inventory Management:**
+
   - Automatically update stock levels after an order is placed.
   - Set a product’s status to "Out of Stock" when inventory reaches zero.
 
@@ -47,11 +50,17 @@ Clone this repository to your local machine using the following command:
 
 ```bash
 git clone https://github.com/yourusername/bike-store.git
+```
 
-## 2. Install Dependencies
+### 2. Install Dependencies
 
 Navigate to the project directory and install all required dependencies:
 
 ```bash
 cd bike-store
 npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a .env file in the root directory of the project, and set the following environment variables:
