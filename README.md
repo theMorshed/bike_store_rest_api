@@ -41,6 +41,7 @@ Before running the project locally, make sure you have the following installed:
 
 - **Node.js** – Version 16.x or higher
 - **MongoDB** – Local or cloud instance (e.g., MongoDB Atlas)
+ 
 
 ## Setting Up the Project Locally
 
@@ -64,3 +65,30 @@ npm install
 ### 3. Configure Environment Variables
 
 Create a .env file in the root directory of the project, and set the following environment variables:
+
+```bash
+PORT=5000
+DATABASE_URL=mongodb://localhost:27017/bikestore
+```
+
+- **PORT:** – The port on which the server will run.
+- **DATABASE_URL:** – Your MongoDB connection URL (can be a local MongoDB instance or a MongoDB Atlas connection string).
+
+### 4. Run the Application
+Start the development server by running the following command:
+
+```bash
+npm run dev
+```
+This will start the server on the port specified in your .env file (default: 5000).
+
+### 5. Access the Application
+Once the server is running, you can access the application API at:
+
+```bash
+http://localhost:5000
+```
+
+
+
+
