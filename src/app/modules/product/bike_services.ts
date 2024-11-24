@@ -1,43 +1,76 @@
 import { Product } from "./bike_interface";
 import ProductModel from "./bike_model";
 
-const createProuductInMongoDB = async(product: Product) => {
+/**
+ * Create a new product (bike) in the MongoDB database.
+ * @param product - The product (bike) data to be created.
+ * @returns The created product document from MongoDB.
+ */
+const createProuductInMongoDB = async (product: Product) => {
+  // Create and save the new product in MongoDB
   const result = await ProductModel.create(product);
   return result;
 }
 
+/**
+ * Retrieve all bike products from the database.
+ * Optionally filter results by searchTerm (name, brand, or category).
+ * @param searchTerm - A string to search for matching bikes (optional).
+ * @returns An array of bike products that match the search criteria.
+ */
 const getAllBikes = async (searchTerm?: string): Promise<Product[]> => {
+  // Initial query object to fetch all bikes
   const query: any = {};
 
-  // Check if searchTerm is provided and build the query
+  // If searchTerm is provided, create a case-insensitive regex query
   if (searchTerm) {
     const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search
     query.$or = [
-      { name: regex },
-      { brand: regex },
-      { category: regex }
+      { name: regex },  // Search by bike name
+      { brand: regex }, // Search by brand
+      { category: regex } // Search by category
     ];
   }
 
+  // Return all bikes matching the query (or all if no searchTerm)
   return await ProductModel.find(query);
 }
 
-const getBikeByID = async(id: string) => {
+/**
+ * Retrieve a single bike product by its ID.
+ * @param id - The ID of the bike to retrieve.
+ * @returns The bike product with the specified ID.
+ */
+const getBikeByID = async (id: string) => {
+  // Find and return the bike by its ID
   const result = await ProductModel.findById(id);
   return result;
 }
 
-const updateBikeByID = async(id: string, bikeData: any) => {
-  const result = await ProductModel.findByIdAndUpdate(id, bikeData, {new: true});
+/**
+ * Update a bike product by its ID.
+ * @param id - The ID of the bike to update.
+ * @param bikeData - The new data to update the bike with.
+ * @returns The updated bike product document.
+ */
+const updateBikeByID = async (id: string, bikeData: any) => {
+  // Find the bike by ID and update it with the new data
+  const result = await ProductModel.findByIdAndUpdate(id, bikeData, { new: true });
   return result;
 }
 
-const deleteBikeByID = async(id: string) => {
+/**
+ * Delete a bike product by its ID.
+ * @param id - The ID of the bike to delete.
+ * @returns The result of the deletion (null if not found).
+ */
+const deleteBikeByID = async (id: string) => {
+  // Find the bike by ID and delete it
   const result = await ProductModel.findByIdAndDelete(id);
   return result;
 }
 
-
+// Export all service functions for use in the controller
 export const prouductServices = {
   createProuductInMongoDB,
   getAllBikes,
