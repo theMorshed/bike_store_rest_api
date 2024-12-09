@@ -50,7 +50,7 @@ Before running the project locally, make sure you have the following installed:
 Clone this repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/yourusername/bike-store.git
+git clone https://github.com/theMorshed/bike_store_rest_api.git
 ```
 
 ### 2. Install Dependencies
