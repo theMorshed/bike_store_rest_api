@@ -17,14 +17,14 @@ const createBike = async (req: Request, res: Response) => {
         // Respond with a success message and the created product data
         res.status(200).json({
             success: true,
-            message: 'Product created successfully',
+            message: 'Bike created successfully',
             data: result,
         });
     } catch (error) {
         // Catch any errors and respond with an error message
         res.status(500).json({
             success: false,
-            message: 'Failed to create product',
+            message: 'Failed to create bike',
             error,
             stack: new Error().stack, // Include stack trace for debugging (useful in development)
         });
