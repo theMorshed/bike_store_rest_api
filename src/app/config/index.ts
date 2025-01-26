@@ -12,4 +12,7 @@ export default {
 
     // MongoDB database URL (from the .env file)
     db_url: process.env.DATABASE_URL,
+
+    // MongoDB database URL (from the .env file)
+    NODE_ENV: process.env.NODE_ENV,
 }

@@ -3,6 +3,8 @@ import express, { Application } from 'express'  // Express and Application types
 import cors from 'cors';  // CORS middleware for enabling cross-origin resource sharing
 import productRouter from './app/modules/product/bike_router';  // Router for product-related routes
 import orderRouter from './app/modules/order/order_router';  // Router for order-related routes
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
 
 // Initialize the Express application
 const app: Application = express();
@@ -25,6 +27,8 @@ app.use('/api/orders', orderRouter);
 app.get('/', (req, res) => {
     res.send('Bike store API project run successfully');
 })
+
+app.use(globalErrorHandler);
 
 // Export the app to be used in other files (typically server.ts or index.ts)
 export default app;

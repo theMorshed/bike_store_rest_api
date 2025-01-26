@@ -11,7 +11,7 @@ const productRouter = express.Router();
  * Controller: productControllers.createProduct
  * Description: This route handles the creation of a new bike product in the database.
  */
-productRouter.post('/', productControllers.createBike);
+productRouter.post('/create-bike', productControllers.createBike);
 
 /**
  * Endpoint to get all bikes in the database.
