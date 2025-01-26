@@ -2,12 +2,7 @@ import { TOrder } from "./order_type";
 import OrderModel from "./order_model";
 import ProductModel from "../product/bike_model";
 
-/**
- * Create an order in MongoDB with inventory management.
- * @param productData - Order data (email, product, quantity)
- * @returns Created order documenta
- */
-const createOrderInMongoDB = async (productData: TOrder) => {
+const createOrderService = async (productData: TOrder) => {
     try {
         // Step 1: Validate the product
         const product = await ProductModel.findById(productData.product);
@@ -39,32 +34,53 @@ const createOrderInMongoDB = async (productData: TOrder) => {
     }
 };
 
-/**
- * Calculate total revenue from all orders.
- * @returns Total revenue
- */
-const calculateRevenue = async () => {
-    const result = await OrderModel.aggregate([
-        {
-            $group: {
-                _id: null, // get all documents
-                totalRevenue: { $sum: "$totalPrice" }, // Sum up the totalPrice from all orders
-            },
-        },
-        {
-            $project: {
-                _id: 0, // Exclude the _id field from the output
-                totalRevenue: 1,
-            },
-        },
-    ]);
+const getAllOrdersService = async () => {
+    const orders = await OrderModel.find({}).populate('user', ['name', 'email']).populate('product');
+    return orders;
+}
 
-    // If no orders exist, return totalRevenue as 0
-    return result.length > 0 ? result[0].totalRevenue : 0;
-};
+const getSingleOrderService = async(orderId: string) => {
+    const order = await OrderModel.findById(orderId).populate('user', ['name', 'email']).populate('product');
+    return order;
+}
+
+const updateOrderService = async(id: string, payload: Partial<TOrder>) => {
+    // Step 1: Validate the product
+    const existingOrder = await OrderModel.findById(id);
+    const orderExistingQuantity = existingOrder?.quantity;
+    const newQuantity = orderExistingQuantity! + payload?.quantity!;
+    const product = await ProductModel.findById(existingOrder?.product);
+
+    // Step 2: Check stock availability
+    if (payload.quantity! > product?.quantity!) {
+        throw new Error("Insufficient product quantity in stock");
+    }
+
+    // Step 3: Calculate total price
+    const totalPrice = product?.price! * newQuantity; 
+
+    const orderToUpdate = {
+        quantity: newQuantity,
+        totalPrice: totalPrice
+    }
+    const productQuantity = product?.quantity! - payload.quantity!;
+
+    await ProductModel.findByIdAndUpdate(existingOrder?.product, {quantity: productQuantity});
+    const order = await OrderModel.findByIdAndUpdate(id, orderToUpdate, { new: true });
+    return order;
+}
+
+const deleteOrderService = async(id: string) => {
+    const order = await OrderModel.findByIdAndDelete(id);
+    return order;
+}
+
 
 // export all services
 export const orderServices = {
-    createOrderInMongoDB,
-    calculateRevenue
+    createOrderService,
+    getAllOrdersService,
+    getSingleOrderService,
+    updateOrderService,
+    deleteOrderService
 };
