@@ -19,7 +19,7 @@ import statusCodes from "http-status-codes";
  * @param {NextFunction} next - The next middleware function in the request-response cycle.
  * @returns {Response} Returns a JSON response with a 404 status code and an error message.
  */
-const notFound = (req: Request, res: Response, next: NextFunction): Response => {
+const notFound = (req: Request, res: Response, next: NextFunction): any => {
     return res.status(statusCodes.NOT_FOUND).json({
         success: false,
         message: "API not Found",

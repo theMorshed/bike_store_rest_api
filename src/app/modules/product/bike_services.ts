@@ -1,4 +1,4 @@
-import { IProduct } from "./bike_interface";
+import { IProduct } from "./bike_type";
 import ProductModel from "./bike_model";
 
 /**

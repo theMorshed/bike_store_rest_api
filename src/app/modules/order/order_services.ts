@@ -1,4 +1,4 @@
-import { IOrder } from "./order_interface";
+import { TOrder } from "./order_type";
 import OrderModel from "./order_model";
 import ProductModel from "../product/bike_model";
 
@@ -7,7 +7,7 @@ import ProductModel from "../product/bike_model";
  * @param productData - Order data (email, product, quantity)
  * @returns Created order documenta
  */
-const createOrderInMongoDB = async (productData: IOrder) => {
+const createOrderInMongoDB = async (productData: TOrder) => {
     try {
         // Step 1: Validate the product
         const product = await ProductModel.findById(productData.product);
