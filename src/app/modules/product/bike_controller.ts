@@ -16,7 +16,7 @@ const createBike = catchAsync(async(req, res) => {
 
 const getAllBikes = catchAsync(async(req, res) => {    
     const searchTerm = req.query.searchTerm as string | undefined;
-    const bikes = await prouductServices.getAllBikes(searchTerm);
+    const bikes = await prouductServices.getAllBikes(req.query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

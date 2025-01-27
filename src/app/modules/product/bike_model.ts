@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema<TProduct>(
             type: String,
             required: [true, 'Category is required'],  // Category must be provided
             enum: {
-                values: ['Mountain', 'Road', 'Hybrid', 'Electric'],  // Valid categories
+                values: ['Mountain', 'Road', 'Hybrid', 'Electric', 'Featured'],  // Valid categories
                 message: '{VALUE} is not a valid category'  // Error message if an invalid category is provided
             }
         },

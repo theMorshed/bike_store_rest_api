@@ -1,12 +1,13 @@
-import { IProduct } from "./bike_type";
+import { TProduct } from "./bike_type";
 import ProductModel from "./bike_model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 /**
  * Create a new product (bike) in the MongoDB database.
  * @param product - The product (bike) data to be created.
  * @returns The created product document from MongoDB.
  */
-const createBikeIntoDB = async (product: IProduct) => {
+const createBikeIntoDB = async (product: TProduct) => {
   // Create and save the new product in MongoDB
   const result = await ProductModel.create(product);
   return result;
@@ -18,22 +19,14 @@ const createBikeIntoDB = async (product: IProduct) => {
  * @param searchTerm - A string to search for matching bikes (optional).
  * @returns An array of bike products that match the search criteria.
  */
-const getAllBikes = async (searchTerm?: string): Promise<IProduct[]> => {
-  // Initial query object to fetch all bikes
-  const query: any = {};
-
-  // If searchTerm is provided, create a case-insensitive regex query
-  if (searchTerm) {
-    const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search
-    query.$or = [
-      { name: regex },  // Search by bike name
-      { brand: regex }, // Search by brand
-      { category: regex } // Search by category
-    ];
-  }
-
-  // Return all bikes matching the query (or all if no searchTerm)
-  return await ProductModel.find(query);
+const getAllBikes = async (query: Record<string, unknown>): Promise<TProduct[]> => {
+  const bikesQuery = new QueryBuilder(ProductModel.find(), query)
+    .search(['name', 'description'])
+    .sort()
+    .filter();
+    
+  const bikes = await bikesQuery.modelQuery;
+  return bikes;
 }
 
 /**
