@@ -25,14 +25,23 @@ const orderSchema = new Schema<TOrder>(
         ],
         status: {
             type: String,
-            required: [true, 'Status is required'],
-            default: 'pending'
+            enum: ["Pending", "Paid", "Shipped", "Completed", "Cancelled"],
+            default: 'Pending'
         },
         totalPrice: {
             type: Number,
             required: false,
             min: [0, 'Total price cannot be negative']
-        }
+        },
+        transaction: {
+            id: String,
+            transactionStatus: String,
+            bank_status: String,
+            sp_code: String,
+            sp_message: String,
+            method: String,
+            date_time: String,
+        },
     },
     {
         timestamps: true

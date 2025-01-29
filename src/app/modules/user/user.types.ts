@@ -13,7 +13,7 @@
  * - `'user'`: A standard user with limited access.
  * - `'admin'`: An administrator with elevated permissions.
  */
-export type TUserRole = 'customer';
+export type TUserRole = 'customer' | 'admin';
 
 /**
  * Type for User Entity
@@ -32,3 +32,20 @@ export type TUser = {
     role: TUserRole;
     isBlocked: boolean;
 };
+
+export enum UserRole {
+  user = "user",
+  admin = "admin",
+}
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  phone?: string;
+  address?: string;
+  city?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

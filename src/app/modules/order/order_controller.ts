@@ -2,20 +2,29 @@ import { orderServices } from "./order_services";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
-import User from "../user/user.model";
-import ProductModel from "../product/bike_model";
 import AppError from "../../errors/AppError";
 import OrderModel from "./order_model";
 
 export const createOrder = catchAsync(async (req, res) => {
-    const orderData = req.body;
-    const result = await orderServices.createOrderService(orderData);
+    const user = req.user;
+    const result = await orderServices.createOrderService(user, req.body, req.ip!);
 
     sendResponse(res, {
         success: true,
         statusCode: StatusCodes.CREATED,
         message: 'Order created successfully',
         data: result
+    });
+});
+
+const verifyPayment = catchAsync(async (req, res) => {
+    const order = await orderServices.verifyPaymentService(req.params.order_id as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.CREATED,
+        message: "Order verified successfully",
+        data: order,
     });
 });
 
@@ -93,5 +102,6 @@ export const orderControllers = {
     getSingleOrder,
     updateOrder,
     deleteOrder,
-    getCustomerOrders
+    getCustomerOrders,
+    verifyPayment
 }
