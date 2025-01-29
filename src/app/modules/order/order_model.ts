@@ -8,25 +8,29 @@ const orderSchema = new Schema<TOrder>(
             type: Types.ObjectId,
             ref: 'User',
             required: [true, 'User is required']
-        },        
-        product: {
-            type: Types.ObjectId,
-            ref: 'Product', 
-            required: [true, 'Product is required'] 
-        }, 
+        },
+        products: [
+            {
+                product: {
+                    type: Types.ObjectId,
+                    ref: 'Product',
+                    required: [true, 'Product is required']
+                },
+                quantity: {
+                    type: Number,
+                    required: [true, 'Quantity is required'],
+                    min: [1, 'Quantity must be at least 1']
+                }
+            }
+        ],
         status: {
             type: String,
             required: [true, 'Status is required'],
             default: 'pending'
-        },     
-        quantity: {
-            type: Number,
-            required: [true, 'Quantity is required'], 
-            min: [1, 'Quantity must be at least 1'] 
         },
         totalPrice: {
             type: Number,
-            required: [true, 'Total price is required'],
+            required: false,
             min: [0, 'Total price cannot be negative']
         }
     },
@@ -37,16 +41,22 @@ const orderSchema = new Schema<TOrder>(
 
 orderSchema.pre('save', async function(next) {
     try {
-        const product = await ProductModel.findById(this.product);
-        if (!product) {
-            return next(new Error('Product not found'));
+        let total = 0;
+
+        for (const item of this.products) {
+            const product = await ProductModel.findById(item.product);
+            if (!product) {
+                return next(new Error(`Product with ID ${item.product} not found`));
+            }
+
+            if (item.quantity > product.quantity) {
+                return next(new Error(`Insufficient stock for product ${item.product}`));
+            }
+
+            total += product.price * item.quantity; // Price is fetched from the product model
         }
 
-        if (this.quantity > product.quantity) {
-            return next(new Error('Insufficient product quantity in stock'));
-        }
-
-        this.totalPrice = product.price * this.quantity; 
+        this.totalPrice = total;
 
         next();
     } catch (error: any) {

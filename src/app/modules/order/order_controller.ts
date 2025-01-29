@@ -7,20 +7,8 @@ import ProductModel from "../product/bike_model";
 import AppError from "../../errors/AppError";
 import OrderModel from "./order_model";
 
-export const createOrder = catchAsync(async(req, res) => {
+export const createOrder = catchAsync(async (req, res) => {
     const orderData = req.body;
-    const { user, product } = req.body;
-
-    const userExist = await User.findById(user);
-    const productExist = await ProductModel.findById(product);
-
-    if (!userExist) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'User does not exists');
-    }
-    if (!productExist) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Product does not exists');
-    }
-    
     const result = await orderServices.createOrderService(orderData);
 
     sendResponse(res, {
@@ -28,8 +16,9 @@ export const createOrder = catchAsync(async(req, res) => {
         statusCode: StatusCodes.CREATED,
         message: 'Order created successfully',
         data: result
-    })
+    });
 });
+
 
 const getAllOrders = catchAsync(async(req, res) => {
     const orders = await orderServices.getAllOrdersService();

@@ -2,8 +2,11 @@ import { ObjectId } from 'mongoose';
 
 export type TOrder = {
     user: ObjectId;
-    product: ObjectId;
+    products: {
+        product: ObjectId;
+        quantity: number;
+        price: number;
+    }[];
     status: string;
-    quantity: number;
     totalPrice: number;
 }

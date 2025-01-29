@@ -3,46 +3,48 @@ import OrderModel from "./order_model";
 import ProductModel from "../product/bike_model";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
+import User from "../user/user.model";
 
-const createOrderService = async (productData: TOrder) => {
-    try {
-        // Step 1: Validate the product
-        const product = await ProductModel.findById(productData.product);
-        if (!product) {
-            throw new Error("Product not found");
-        }
-
-        // Step 2: Check stock availability
-        if (productData.quantity > product.quantity) {
-            throw new Error("Insufficient product quantity in stock");
-        }
-
-        // Step 3: Calculate total price
-        productData.totalPrice = product.price * productData.quantity;
-
-        // Step 4: Create the order
-        const order = await OrderModel.create(productData);
-
-        // Step 5: Update inventory
-        product.quantity -= productData.quantity;
-        if (product.quantity === 0) {
-            product.inStock = false;
-        }
-        await product.save();
-
-        return order;
-    } catch (error: any) {
-        throw new Error(error.message);
+const createOrderService = async (orderData: TOrder) => {
+    // Ensure user exists
+    const userExist = await User.findById(orderData.user);
+    if (!userExist) {
+        throw new AppError(StatusCodes.NOT_FOUND, 'User does not exist');
     }
+
+    // Validate each product and check stock availability
+    for (const item of orderData.products) {
+        const productExist = await ProductModel.findById(item.product);
+        if (!productExist) {
+            throw new AppError(StatusCodes.NOT_FOUND, `Product with ID ${item.product} does not exist`);
+        }
+
+        // Check if there's enough stock for the product
+        if (item.quantity > productExist.quantity) {
+            throw new AppError(StatusCodes.BAD_REQUEST, `Insufficient stock for product ${item.product}`);
+        }
+
+        // Update the product's stock in the database
+        productExist.quantity -= item.quantity;
+        if (productExist.quantity === 0) {
+            productExist.inStock = false;
+        }
+        await productExist.save();
+    }
+
+    // Create the order (totalPrice will be calculated automatically in the model)
+    const order = await OrderModel.create(orderData);
+
+    return order;
 };
 
 const getAllOrdersService = async () => {
-    const orders = await OrderModel.find({}).populate('user', ['name', 'email']).populate('product');
+    const orders = await OrderModel.find({}).populate('user', ['name', 'email']).populate('products.product');
     return orders;
 }
 
 const getSingleOrderService = async(orderId: string) => {
-    const order = await OrderModel.findById(orderId).populate('user', ['name', 'email']).populate('product');
+    const order = await OrderModel.findById(orderId).populate('user', ['name', 'email']).populate('products.product');
     return order;
 }
 
@@ -65,7 +67,7 @@ const deleteOrderService = async(id: string) => {
 }
 
 const getCustomerOrdersService = async(customerId: string) => {
-    const orders = await OrderModel.find({user: customerId}).populate('user', ['name', 'email']).populate('product');
+    const orders = await OrderModel.find({user: customerId}).populate('user', ['name', 'email']).populate('products.product');
     return orders;
 }
 
