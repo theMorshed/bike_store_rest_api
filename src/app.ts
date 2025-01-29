@@ -15,7 +15,8 @@ const app: Application = express();
 app.use(express.json());
 
 // Middleware to allow cross-origin requests
-app.use(cors({ origin: ['https://bikestorefrontend.vercel.app'], credentials: true }));
+// app.use(cors({ origin: ['https://bikestorefrontend.vercel.app'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
 
 // API Routes setup
 // Routes for product-related operations like creating and fetching products

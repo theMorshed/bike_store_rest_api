@@ -56,14 +56,6 @@ const getSingleOrder = catchAsync(async(req, res) => {
 
 const updateOrder = catchAsync(async (req, res) => {
     const {orderId} = req.params;
-    const existingOrder = await OrderModel.findById(orderId);
-    const author = existingOrder?.user;
-
-    const orderExists = await OrderModel.findOne({_id: orderId, user: author});
-    if (!orderExists) {
-        throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not the author of this blog!!');
-    }
-
     const order = await orderServices.updateOrderService(orderId, req.body);
 
     sendResponse(res, {
@@ -94,10 +86,23 @@ const deleteOrder = catchAsync(async (req, res) => {
     })
 });
 
+const getCustomerOrders = catchAsync(async(req, res) => {
+    const { customerId } = req.params;
+    const orders = await orderServices.getCustomerOrdersService(customerId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Orders retrieved successfully',
+        data: orders
+    })
+});
+
 export const orderControllers = {
     createOrder,
     getAllOrders,
     getSingleOrder,
     updateOrder,
-    deleteOrder
+    deleteOrder,
+    getCustomerOrders
 }

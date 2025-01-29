@@ -1,6 +1,8 @@
 import { TOrder } from "./order_type";
 import OrderModel from "./order_model";
 import ProductModel from "../product/bike_model";
+import AppError from "../../errors/AppError";
+import { StatusCodes } from "http-status-codes";
 
 const createOrderService = async (productData: TOrder) => {
     try {
@@ -45,34 +47,26 @@ const getSingleOrderService = async(orderId: string) => {
 }
 
 const updateOrderService = async(id: string, payload: Partial<TOrder>) => {
-    // Step 1: Validate the product
     const existingOrder = await OrderModel.findById(id);
-    const orderExistingQuantity = existingOrder?.quantity;
-    const newQuantity = orderExistingQuantity! + payload?.quantity!;
-    const product = await ProductModel.findById(existingOrder?.product);
+    const author = existingOrder?.user;
 
-    // Step 2: Check stock availability
-    if (payload.quantity! > product?.quantity!) {
-        throw new Error("Insufficient product quantity in stock");
+    const orderExists = await OrderModel.findOne({_id: id, user: author});
+    if (!orderExists) {
+        throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not the author of this blog!!');
     }
 
-    // Step 3: Calculate total price
-    const totalPrice = product?.price! * newQuantity; 
-
-    const orderToUpdate = {
-        quantity: newQuantity,
-        totalPrice: totalPrice
-    }
-    const productQuantity = product?.quantity! - payload.quantity!;
-
-    await ProductModel.findByIdAndUpdate(existingOrder?.product, {quantity: productQuantity});
-    const order = await OrderModel.findByIdAndUpdate(id, orderToUpdate, { new: true });
+    const order = await OrderModel.findByIdAndUpdate(id, payload, { new: true });
     return order;
 }
 
 const deleteOrderService = async(id: string) => {
     const order = await OrderModel.findByIdAndDelete(id);
     return order;
+}
+
+const getCustomerOrdersService = async(customerId: string) => {
+    const orders = await OrderModel.find({user: customerId}).populate('user', ['name', 'email']).populate('product');
+    return orders;
 }
 
 
@@ -82,5 +76,6 @@ export const orderServices = {
     getAllOrdersService,
     getSingleOrderService,
     updateOrderService,
-    deleteOrderService
+    deleteOrderService,
+    getCustomerOrdersService
 };

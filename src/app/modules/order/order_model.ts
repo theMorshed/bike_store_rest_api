@@ -17,7 +17,7 @@ const orderSchema = new Schema<TOrder>(
         status: {
             type: String,
             required: [true, 'Status is required'],
-            default: 'confirmed'
+            default: 'pending'
         },     
         quantity: {
             type: Number,
